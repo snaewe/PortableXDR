@@ -1,0 +1,14 @@
+AC_INIT(portablexdr, 4.0.6)
+AM_INIT_AUTOMAKE
+
+AC_CONFIG_HEADERS([config.h])
+
+AC_PROG_CC
+AC_CHECK_PROGS(AR, ar)
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+
+AC_CHECK_HEADERS([arpa/inet.h winsock2.h])
+
+AC_OUTPUT(Makefile)
+
