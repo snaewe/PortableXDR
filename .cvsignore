@@ -15,3 +15,4 @@ install-sh
 *.lo
 libtool
 stamp-h1
+portablexdr-*.tar.gz
