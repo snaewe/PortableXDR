@@ -1,3 +1,9 @@
+2008-02-06  Richard Jones  <rjones@redhat.com>
+
+	* xdr_float.c: Patch by Brecht Sanders which fixes type-punning
+	  error when building on Windows.
+	* configure.ac, Makefile.am: Build a DLL again on Windows.
+
 2008-01-22  Richard Jones  <rjones@redhat.com>
 
 	Initial package creation.
