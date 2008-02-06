@@ -118,7 +118,7 @@ xdr_float(xdrs, fp)
 		is.mantissa = (vs.mantissa1 << 16) | vs.mantissa2;
 	shipit:
 		is.sign = vs.sign;
-		return (XDR_PUTLONG(xdrs, (long *)&is));
+		return (XDR_PUTLONG(xdrs, (long *)(void *)&is));
 #endif
 
 	case XDR_DECODE:
@@ -126,7 +126,7 @@ xdr_float(xdrs, fp)
 		return (XDR_GETLONG(xdrs, (long *)fp));
 #else
 		vsp = (struct vax_single *)fp;
-		if (!XDR_GETLONG(xdrs, (long *)&is))
+		if (!XDR_GETLONG(xdrs, (long *)(void *)&is))
 			return (FALSE);
 		for (i = 0, lim = sgl_limits;
 			i < sizeof(sgl_limits)/sizeof(struct sgl_limits);
@@ -230,7 +230,7 @@ xdr_double(xdrs, dp)
 				((vd.mantissa4 >> 3) & MASK(13));
 	shipit:
 		id.sign = vd.sign;
-		lp = (long *)&id;
+		lp = (long *)(void *)&id;
 #endif
 #if defined(__CYGWIN32__) || defined(__MINGW32__)
 		return (XDR_PUTLONG(xdrs, lp+1) && XDR_PUTLONG(xdrs, lp));
@@ -247,7 +247,7 @@ xdr_double(xdrs, dp)
 		return (XDR_GETLONG(xdrs, lp++) && XDR_GETLONG(xdrs, lp));
 #endif
 #else
-		lp = (long *)&id;
+		lp = (long *)(void *)&id;
 		if (!XDR_GETLONG(xdrs, lp++) || !XDR_GETLONG(xdrs, lp))
 			return (FALSE);
 		for (i = 0, lim = dbl_limits;
@@ -268,7 +268,7 @@ xdr_double(xdrs, dp)
 		vd.mantissa4 = (id.mantissa2 << 3);
 	doneit:
 		vd.sign = id.sign;
-		*dp = *((double *)&vd);
+		*dp = *((double *)(void *)&vd);
 		return (TRUE);
 #endif
 

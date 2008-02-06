@@ -3,10 +3,19 @@ AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])
 
+AC_CANONICAL_HOST
 AC_PROG_CC
 AC_CHECK_PROGS(AR, ar)
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
+
+MINGW_EXTRA_LDFLAGS=
+case "$host" in
+ *-*-mingw*)
+   MINGW_EXTRA_LDFLAGS="-no-undefined -lws2_32"
+   ;;
+esac
+AC_SUBST(MINGW_EXTRA_LDFLAGS)
 
 AC_CHECK_HEADERS([arpa/inet.h winsock2.h])
 
