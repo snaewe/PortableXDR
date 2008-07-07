@@ -1,4 +1,4 @@
-AC_INIT(portablexdr, 4.0.8)
+AC_INIT(portablexdr, 4.0.9)
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])
