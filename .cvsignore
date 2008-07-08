@@ -16,3 +16,8 @@ install-sh
 libtool
 stamp-h1
 portablexdr-*.tar.gz
+missing
+config.guess
+config.sub
+depcomp
+*.loT

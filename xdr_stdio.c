@@ -45,16 +45,14 @@ static char sccsid[] = "@(#)xdr_stdio.c 1.16 87/08/11 Copyr 1984 Sun Micro";
 
 #include <stdio.h>
 
-#ifdef HAVE_WINSOCK2_H
-#include <winsock2.h>
-#endif
-
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
+#include "byteswap.h"
 
 #if defined(__CYGWIN32__) || defined(__MINGW32__)
 #include <stdlib.h>

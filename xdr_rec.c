@@ -54,16 +54,14 @@ static char sccsid[] = "@(#)xdr_rec.c 1.21 87/08/11 Copyr 1984 Sun Micro";
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef HAVE_WINSOCK2_H
-#include <winsock2.h>
-#endif
-
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
+#include "byteswap.h"
 
 extern long	lseek();
 

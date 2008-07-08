@@ -44,10 +44,6 @@ static char sccsid[] = "@(#)xdr_mem.c 1.19 87/08/11 Copyr 1984 Sun Micro";
 
 #include <config.h>
 
-#ifdef HAVE_WINSOCK2_H
-#include <winsock2.h>
-#endif
-
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
@@ -56,6 +52,8 @@ static char sccsid[] = "@(#)xdr_mem.c 1.19 87/08/11 Copyr 1984 Sun Micro";
 
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+
+#include "byteswap.h"
 
 static bool_t	xdrmem_getlong();
 static bool_t	xdrmem_putlong();
