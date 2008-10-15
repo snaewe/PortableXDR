@@ -1,4 +1,4 @@
-AC_INIT(portablexdr, 4.0.10)
+AC_INIT(portablexdr, 4.0.11)
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])
@@ -17,7 +17,7 @@ case "$host" in
 esac
 AC_SUBST(MINGW_EXTRA_LDFLAGS)
 
-AC_CHECK_HEADERS([arpa/inet.h])
+AC_CHECK_HEADERS([arpa/inet.h sys/param.h])
 AC_CHECK_FUNCS([ntohl htonl ntohs htons])
 
 AC_OUTPUT(Makefile)

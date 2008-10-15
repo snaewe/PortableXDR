@@ -20,6 +20,10 @@
 #ifndef _PORTABLEXDR_BYTESWAP_H
 #define _PORTABLEXDR_BYTESWAP_H 1
 
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
 /* Swap bytes in 16 bit value.  */
 #define __bswap_constant_16(x) \
      ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
@@ -107,12 +111,16 @@ static inline uint32_t
 htonl (x)
      uint32_t x;
 {
+#if defined(BYTE_ORDER) && defined(BIG_ENDIAN) && defined(LITTLE_ENDIAN)
 #if BYTE_ORDER == BIG_ENDIAN
   return x;
 #elif BYTE_ORDER == LITTLE_ENDIAN
   return __bswap_32 (x);
 #else
 # error "What kind of system is this?"
+#endif
+#else
+#error "BYTE_ORDER/BIG_ENDIAN/LITTLE_ENDIAN are not defined"
 #endif
 }
 
@@ -147,12 +155,16 @@ static inline uint16_t
 htons (x)
      uint16_t x;
 {
+#if defined(BYTE_ORDER) && defined(BIG_ENDIAN) && defined(LITTLE_ENDIAN)
 #if BYTE_ORDER == BIG_ENDIAN
   return x;
 #elif BYTE_ORDER == LITTLE_ENDIAN
   return __bswap_16 (x);
 #else
 # error "What kind of system is this?"
+#endif
+#else
+#error "BYTE_ORDER/BIG_ENDIAN/LITTLE_ENDIAN are not defined"
 #endif
 }
 
