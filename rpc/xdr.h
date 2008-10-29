@@ -161,7 +161,7 @@ typedef struct {
 	(*(xdrs)->x_ops->x_setpostn)(xdrs, pos)
 
 #define	XDR_INLINE(xdrs, len)				\
-	(*(xdrs)->x_ops->x_inline)(xdrs, len)
+	(void *)((*(xdrs)->x_ops->x_inline)(xdrs, len))
 #define	xdr_inline(xdrs, len)				\
 	(*(xdrs)->x_ops->x_inline)(xdrs, len)
 

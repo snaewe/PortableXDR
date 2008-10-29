@@ -1,3 +1,8 @@
+2008-10-29  Jim Meyering  <meyering@redhat.com>
+
+	* rpc/xdr.h (XDR_INLINE): Cast result to (void*), to avoid warnings,
+	on at least mingw.
+
 2008-02-06  Richard Jones  <rjones@redhat.com>
 
 	* xdr_float.c: Patch by Brecht Sanders which fixes type-punning
