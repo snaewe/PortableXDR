@@ -1,11 +1,11 @@
-AC_INIT(portablexdr, 4.0.11)
+AC_INIT([portablexdr], [4.0.11])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])
 
 AC_CANONICAL_HOST
 AC_PROG_CC
-AC_CHECK_PROGS(AR, ar)
+AC_CHECK_PROGS([AR], [ar])
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 
@@ -15,10 +15,9 @@ case "$host" in
    MINGW_EXTRA_LDFLAGS="-no-undefined"
    ;;
 esac
-AC_SUBST(MINGW_EXTRA_LDFLAGS)
+AC_SUBST([MINGW_EXTRA_LDFLAGS])
 
 AC_CHECK_HEADERS([arpa/inet.h sys/param.h])
 AC_CHECK_FUNCS([ntohl htonl ntohs htons])
 
-AC_OUTPUT(Makefile)
-
+AC_OUTPUT([Makefile])

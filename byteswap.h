@@ -24,6 +24,8 @@
 #include <sys/param.h>
 #endif
 
+#ifndef __bswap_constant_16
+
 /* Swap bytes in 16 bit value.  */
 #define __bswap_constant_16(x) \
      ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
@@ -172,4 +174,5 @@ htons (x)
 
 #endif
 
+#endif
 #endif
