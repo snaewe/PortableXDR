@@ -29,7 +29,8 @@
 
 HEXLIT     "0x"[0-9a-fA-F]+
 DECLIT     0|[1-9][0-9]*
-INTLIT     {HEXLIT}|{DECLIT}
+OCTLIT     0[0-7]+
+INTLIT     {HEXLIT}|{DECLIT}|{OCTLIT}
 IDENT      [a-zA-Z_][a-zA-Z_0-9]*
 WS         [[:space:]]+
 
@@ -51,7 +52,7 @@ WS         [[:space:]]+
   if (filename == NULL) perrorf ("malloc");
 
   if (sscanf (yytext+2, "%d \"%[^\"]\"", &lineno, filename) == 2) {
-    yylineno = lineno - 1;
+    yylineno = lineno;
     free (input_filename);
     input_filename = filename;
   }
@@ -136,6 +137,7 @@ hyper      return HYPER;
 double     return DOUBLE;
 string     return STRING;
 opaque     return OPAQUE;
+bool       return BOOL;
 
 void       return VOID;
 

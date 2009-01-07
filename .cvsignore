@@ -23,6 +23,8 @@ depcomp
 *.loT
 portable-rpcgen
 remote_protocol.x
+remote_protocol.c
+remote_protocol.h
 rpcgen_parse.c
 rpcgen_parse.h
 rpcgen_scan.c

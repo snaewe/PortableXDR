@@ -29,26 +29,22 @@
 
 #include "rpcgen_int.h"
 
+enum output_mode output_mode;
+
 static void print_version (void);
 static void usage (const char *progname);
-static void do_rpcgen (const char *filename);
+static void do_rpcgen (const char *filename, const char *out);
 static char *make_cpp_command (const char *filename);
-
-/* Symbols exported from the scanner. */
-extern FILE *yyin, *yyout;
-extern int yyparse (void);
-extern int yylineno;
-extern int yydebug;
 
 int
 main (int argc, char *argv[])
 {
   int opt;
+  char *filename;
+  int output_modes = 0;
+  char *out = NULL;
 
-  /* To enable debugging in the parser, you also need to compile
-   * with -DYYDEBUG
-   */
-#if 0
+#if YYDEBUG
   yydebug = 1;
 #endif
 
@@ -76,9 +72,16 @@ main (int argc, char *argv[])
 
 	/*-- Options that we do support. --*/
       case 'c':
+	output_modes |= 1 << output_c;
+	break;
+
       case 'h':
+	output_modes |= 1 << output_h;
+	break;
+
       case 'o':
-	;
+	out = optarg;
+	break;
 
 	/* None of the other versions of rpcgen support a way to print
 	 * the version number, which is extremely annoying because
@@ -99,8 +102,25 @@ main (int argc, char *argv[])
   if (optind >= argc)
     error ("expected name of input file after options");
 
-  while (optind < argc)
-    do_rpcgen (argv[optind++]);
+  while (optind < argc) {
+    filename = argv[optind++];
+
+    if (output_modes == 0) {
+      output_mode = output_h;
+      do_rpcgen (filename, out);
+      output_mode = output_c;
+      do_rpcgen (filename, out);
+    } else {
+      if ((output_modes & (1 << output_h)) != 0) {
+	output_mode = output_h;
+	do_rpcgen (filename, out);
+      }
+      if ((output_modes & (1 << output_c)) != 0) {
+	output_mode = output_c;
+	do_rpcgen (filename, out);
+      }
+    }
+  }
 
   exit (0);
 }
@@ -138,16 +158,58 @@ usage (const char *progname)
   exit (0);
 }
 
+/* This is a global so the error functions can delete the output file. */
+const char *output_filename = NULL;
+int unlink_output_filename;
+
 /* Called for each input file. */
 static void
-do_rpcgen (const char *filename)
+do_rpcgen (const char *filename, const char *out)
 {
-  char *cmd;
-  int r;
+  char *cmd, *t = NULL;
+  int r, len;
+  const char *ext;
+
+  /* Open the output file. */
+  switch (output_mode) {
+  case output_c: ext = ".c"; break;
+  case output_h: ext = ".h"; break;
+  default: error ("internal error in do_rpcgen / output_mode");
+  }
+
+  if (out && strcmp (out, "-") == 0) {
+    output_filename = NULL;
+    unlink_output_filename = 0;
+    yyout = stdout;
+  }
+  else if (out) {
+    output_filename = out;
+    unlink_output_filename = 1;
+    yyout = fopen (output_filename, "w");
+    if (yyout == NULL)
+      perrorf ("%s", output_filename);
+  }
+  else {
+    len = strlen (filename);
+    t = malloc (len + 3);
+    if (t == NULL)
+      perrorf ("malloc");
+    strcpy (t, filename);
+    if (len >= 2 && strcmp (t + len - 2, ".x") == 0)
+      strcpy (t + len - 2, ext);
+    else
+      strcat (t, ext);
+    output_filename = t;
+    unlink_output_filename = 1;
+    yyout = fopen (output_filename, "w");
+    if (yyout == NULL)
+      perrorf ("%s", output_filename);
+  }
 
   free (input_filename);
   input_filename = NULL;
 
+  /* Make the CPP command and open a pipe. */
   cmd = make_cpp_command (filename);
 
   yyin = popen (cmd, "r");
@@ -155,9 +217,9 @@ do_rpcgen (const char *filename)
     perrorf ("%s", cmd);
   free (cmd);
 
-  yyout = stdout;
+  gen_prologue (filename);
 
-  /* Parse the input file.  This either succeeds or exits with an error. */
+  /* Parse the input file, this also generates the output as a side-effect. */
   r = yyparse ();
   pclose (yyin);
 
@@ -166,8 +228,17 @@ do_rpcgen (const char *filename)
   else if (r == 2)
     error ("parsing failed because we ran out of memory");
 
+  gen_epilogue ();
+
+  if (yyout != stdout)
+    fclose (yyout);
+  output_filename = NULL;
+  unlink_output_filename = 0;
+
   free (input_filename);
   input_filename = NULL;
+
+  free (t);
 }
 
 /* Concatenate $EXTCPP and filename, and make sure the filename is
@@ -270,6 +341,9 @@ error (const char *fs, ...)
 {
   va_list arg;
 
+  if (output_filename && unlink_output_filename)
+    unlink (output_filename);
+
   if (input_filename == NULL)
     fputs (PACKAGE, stderr);
   else
@@ -290,6 +364,9 @@ perrorf (const char *fs, ...)
 {
   va_list arg;
   int e = errno;
+
+  if (output_filename && unlink_output_filename)
+    unlink (output_filename);
 
   if (input_filename == NULL)
     fputs (PACKAGE, stderr);

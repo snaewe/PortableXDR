@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 nobase_include_HEADERS = rpc/rpc.h rpc/types.h rpc/xdr.h
 
 lib_LTLIBRARIES = libportablexdr.la
@@ -14,6 +16,6 @@ BUILT_SOURCES = rpcgen_parse.h
 AM_YFLAGS = -d
 bin_PROGRAMS = portable-rpcgen
 portable_rpcgen_SOURCES = rpcgen_parse.y rpcgen_scan.l \
-	rpcgen_int.h rpcgen_main.c
+	rpcgen_int.h rpcgen_main.c rpcgen_ast.c rpcgen_codegen.c
 portable_rpcgen_CFLAGS = -Wall
 #portable_rpcgen_CFLAGS += -DYYDEBUG

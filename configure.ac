@@ -3,14 +3,19 @@ AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([config.h])
 
+AC_CONFIG_MACRO_DIR([m4])
+
 AC_CANONICAL_HOST
 AC_PROG_CC
-AC_CHECK_PROGS(AR, ar)
+AM_PROG_CC_C_O
+
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 
 AC_PROG_LEX
 AC_PROG_YACC
+
+AC_CHECK_PROGS(AR, ar)
 
 dnl Look for an external 'cpp' program which can run on a file with any
 dnl extension.  The normal CPP can only run on files with a '.c'
