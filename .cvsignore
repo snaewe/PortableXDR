@@ -21,3 +21,8 @@ config.guess
 config.sub
 depcomp
 *.loT
+portable-rpcgen
+remote_protocol.x
+rpcgen_parse.c
+rpcgen_parse.h
+rpcgen_scan.c
