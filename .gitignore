@@ -11,6 +11,7 @@ config.log
 config.status
 ltmain.sh
 install-sh
+*.o
 *.la
 *.lo
 libtool
@@ -31,3 +32,4 @@ rpcgen_scan.c
 test.x
 test.c
 test.h
+ylwrap
