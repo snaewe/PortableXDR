@@ -38,7 +38,7 @@ extern void yyerror (const char *str);
 %type <str> const
 %type <decl> decl
 %type <decl> simple_decl fixed_array_decl variable_array_decl pointer_decl
-%type <decl> string_decl
+%type <decl> string_decl opaque_decl
 %type <enum_value> enum_value
 %type <union_case> union_case
 %type <list> decls enum_values union_cases
@@ -132,6 +132,7 @@ decls	: decl ';'
 	;
 
 decl	: string_decl
+	| opaque_decl
 	| simple_decl
 	| fixed_array_decl
 	| variable_array_decl
@@ -141,15 +142,22 @@ decl	: string_decl
 string_decl
 	: STRING IDENT '<' const '>'
 	{
-	  $$ = new_decl (decl_type_simple,
-	                 new_type (type_string, 0, NULL, $4),
-			 $2, NULL);
+	  $$ = new_decl (decl_type_string, NULL, $2, $4);
 	}
 	| STRING IDENT '<' '>'
 	{
-	  $$ = new_decl (decl_type_simple,
-	                 new_type (type_string, 0, NULL, NULL),
-			 $2, NULL);
+	  $$ = new_decl (decl_type_string, NULL, $2, NULL);
+	}
+	;
+
+opaque_decl
+	: OPAQUE IDENT '[' const ']'
+	{
+	  $$ = new_decl (decl_type_opaque_fixed, NULL, $2, $4);
+	}
+	| OPAQUE IDENT '<' const '>'
+	{
+	  $$ = new_decl (decl_type_opaque_variable, NULL, $2, $4);
 	}
 	;
 
@@ -215,44 +223,48 @@ const	: INTLIT
 	| IDENT
 	;
 
-/* Types.  Note 'string' and 'void' are handled by special cases above. */
+/* Types.  Note 'string', 'opaque' and 'void' are handled by
+ * special cases above.
+ */
 type_ident
 	: CHAR
-	{ $$ = new_type (type_char, 1, NULL, NULL); }
+	/* NB: Unlike SunRPC we make char explicitly signed.  This
+	 * will give some warnings in GCC if you mix PortableXDR
+	 * code with SunRPC headers or vice versa.
+	 */
+	{ $$ = new_type (type_char, 1, NULL); }
 	| SIGNED CHAR
-	{ $$ = new_type (type_char, 1, NULL, NULL); }
+	{ $$ = new_type (type_char, 1, NULL); }
 	| UNSIGNED CHAR
-	{ $$ = new_type (type_char, 0, NULL, NULL); }
+	{ $$ = new_type (type_char, 0, NULL); }
 	| SHORT
-	{ $$ = new_type (type_short, 1, NULL, NULL); }
+	{ $$ = new_type (type_short, 1, NULL); }
 	| SIGNED SHORT
-	{ $$ = new_type (type_short, 1, NULL, NULL); }
+	{ $$ = new_type (type_short, 1, NULL); }
 	| UNSIGNED SHORT
-	{ $$ = new_type (type_short, 0, NULL, NULL); }
+	{ $$ = new_type (type_short, 0, NULL); }
 	| INT
-	{ $$ = new_type (type_int, 1, NULL, NULL); }
+	{ $$ = new_type (type_int, 1, NULL); }
 	| SIGNED INT
-	{ $$ = new_type (type_int, 1, NULL, NULL); }
+	{ $$ = new_type (type_int, 1, NULL); }
 	| UNSIGNED INT
-	{ $$ = new_type (type_int, 0, NULL, NULL); }
+	{ $$ = new_type (type_int, 0, NULL); }
 	| HYPER
-	{ $$ = new_type (type_hyper, 1, NULL, NULL); }
+	{ $$ = new_type (type_hyper, 1, NULL); }
 	| SIGNED HYPER
-	{ $$ = new_type (type_hyper, 1, NULL, NULL); }
+	{ $$ = new_type (type_hyper, 1, NULL); }
 	| UNSIGNED HYPER
-	{ $$ = new_type (type_hyper, 0, NULL, NULL); }
+	{ $$ = new_type (type_hyper, 0, NULL); }
 	| SIGNED
-	{ $$ = new_type (type_int, 1, NULL, NULL); }
+	{ $$ = new_type (type_int, 1, NULL); }
 	| UNSIGNED
-	{ $$ = new_type (type_int, 0, NULL, NULL); }
+	{ $$ = new_type (type_int, 0, NULL); }
 	| DOUBLE
-	{ $$ = new_type (type_double, 0, NULL, NULL); }
-	| OPAQUE
-	{ $$ = new_type (type_opaque, 0, NULL, NULL); }
+	{ $$ = new_type (type_double, 0, NULL); }
 	| BOOL
-	{ $$ = new_type (type_bool, 0, NULL, NULL); }
+	{ $$ = new_type (type_bool, 0, NULL); }
 	| IDENT
-	{ $$ = new_type (type_ident, 0, $1, NULL); }
+	{ $$ = new_type (type_ident, 0, $1); }
 	;
 
 %%

@@ -52,7 +52,7 @@ WS         [[:space:]]+
   if (filename == NULL) perrorf ("malloc");
 
   if (sscanf (yytext+2, "%d \"%[^\"]\"", &lineno, filename) == 2) {
-    yylineno = lineno;
+    yylineno = lineno-1;
     free (input_filename);
     input_filename = filename;
   }

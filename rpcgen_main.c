@@ -60,15 +60,21 @@ main (int argc, char *argv[])
 	/*-- Options supported by any rpcgen that we don't support. --*/
       case 'D': case 'T': case 'K': case 'l': case 'm': case 't':
       case 's':
-	error ("option '%c' is not supported by this PortableXDR rpcgen.\nYou may need to use an alternative rpcgen program instead.", opt);
+	error ("option '%c' is not supported by this PortableXDR rpcgen.\n"
+	       "You may need to use an alternative rpcgen program instead.",
+	       opt);
 
 	/*-- Options supported only by GNU rpcgen that we don't support. --*/
       case 'I': case 'n':
-	error ("option '%c' is not supported by this PortableXDR rpcgen.\nIf you were expecting to use GNU rpcgen, try /usr/bin/rpcgen on a GNU host.", opt);
+	error ("option '%c' is not supported by this PortableXDR rpcgen.\n"
+	       "If you were expecting to use GNU rpcgen, try /usr/bin/rpcgen on a GNU host.",
+	       opt);
 
 	/*-- Options supported only by BSD rpcgen that we don't support. --*/
       case 'A': case 'M': case 'L': case 'S':
-	error ("option '%c' is not supported by this PortableXDR rpcgen.\nIf you were expecting to use BSD rpcgen, try /usr/bin/rpcgen on a BSD host.", opt);
+	error ("option '%c' is not supported by this PortableXDR rpcgen.\n"
+	       "If you were expecting to use BSD rpcgen, try /usr/bin/rpcgen on a BSD host.",
+	       opt);
 
 	/*-- Options that we do support. --*/
       case 'c':

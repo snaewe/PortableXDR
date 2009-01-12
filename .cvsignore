@@ -28,3 +28,6 @@ remote_protocol.h
 rpcgen_parse.c
 rpcgen_parse.h
 rpcgen_scan.c
+test.x
+test.c
+test.h

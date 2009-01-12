@@ -37,7 +37,7 @@ extern enum output_mode output_mode;
 enum type_enum {
   type_char, type_short, type_int, type_hyper,
   type_double,
-  type_string, type_opaque, type_bool,
+  type_bool,
   type_ident,
 };
 
@@ -45,13 +45,15 @@ struct type {
   enum type_enum type;
   int sgn;			/* true if signed, false if unsigned */
   char *ident;
-  char *len;			/* length (only for strings) */
 };
 
-extern struct type *new_type (enum type_enum, int, char *, char *);
+extern struct type *new_type (enum type_enum, int, char *);
 extern void free_type (struct type *);
 
 enum decl_type {
+  decl_type_string,	        /* string foo<len>; (len is optional) */
+  decl_type_opaque_fixed,	/* opaque foo[len]; */
+  decl_type_opaque_variable,	/* opaque foo<len>; */
   decl_type_simple,		/* type ident; */
   decl_type_fixed_array,	/* type ident[len]; */
   decl_type_variable_array,	/* type ident<len>; (len is optional) */
@@ -60,7 +62,7 @@ enum decl_type {
 
 struct decl {
   enum decl_type decl_type;
-  struct type *type;
+  struct type *type;		/* NULL for string & opaque types. */
   char *ident;
   char *len;
 };

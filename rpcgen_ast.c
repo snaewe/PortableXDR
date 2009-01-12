@@ -26,13 +26,12 @@
 #include "rpcgen_int.h"
 
 struct type *
-new_type (enum type_enum type, int sgn, char *ident, char *len)
+new_type (enum type_enum type, int sgn, char *ident)
 {
   struct type *r = malloc (sizeof *r);
   r->type = type;
   r->sgn = sgn;
   r->ident = ident;
-  r->len = len;
   return r;
 }
 
@@ -41,7 +40,6 @@ free_type (struct type *t)
 {
   if (t) {
     free (t->ident);
-    free (t->len);
     free (t);
   }
 }
