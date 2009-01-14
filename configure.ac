@@ -15,6 +15,10 @@ AC_PROG_LIBTOOL
 AC_PROG_LEX
 AC_PROG_YACC
 
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_OFF_T
+
 AC_CHECK_PROGS(AR, ar)
 
 dnl Look for an external 'cpp' program which can run on a file with any
