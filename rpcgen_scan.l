@@ -134,6 +134,7 @@ char       return CHAR;
 short      return SHORT;
 int        return INT;
 hyper      return HYPER;
+float      return FLOAT;
 double     return DOUBLE;
 string     return STRING;
 opaque     return OPAQUE;

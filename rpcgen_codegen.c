@@ -119,7 +119,8 @@ gen_prologue (const char *filename)
 	       "#endif\n"
 	       "\n"
 	       "#include <stdint.h>\n"
-	       "#include <rpc/rpc.h>\n"
+	       "#include <rpc/types.h>\n"
+	       "#include <rpc/xdr.h>\n"
 	       "\n"
 	       "/* Use the following symbol in your code to detect whether\n"
 	       " * PortableXDR's rpcgen was used to compile the source file.\n"
@@ -423,6 +424,9 @@ xdr_func_of_simple_type (const struct type *type)
   case type_hyper:
     if (type->sgn) r = "quad_t"; else r = "u_quad_t";
     break;
+  case type_float:
+    r = "float";
+    break;
   case type_double:
     r = "double";
     break;
@@ -456,6 +460,9 @@ sizeof_simple_type (const struct type *type)
     break;
   case type_hyper:
     r = strdup ("8");
+    break;
+  case type_float:
+    r = strdup ("4");
     break;
   case type_double:
     r = strdup ("8");
@@ -565,6 +572,10 @@ gen_type (const struct type *type)
     case type_hyper:
       if (type->sgn) fputs ("int64_t", yyout);
       else fputs ("uint64_t", yyout);
+      break;
+
+    case type_float:
+      fputs ("float", yyout);
       break;
 
     case type_double:

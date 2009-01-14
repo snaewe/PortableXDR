@@ -59,6 +59,7 @@ extern void yyerror (const char *str);
 %token SHORT
 %token INT
 %token HYPER
+%token FLOAT
 %token DOUBLE
 %token STRING
 %token OPAQUE
@@ -259,6 +260,8 @@ type_ident
 	{ $$ = new_type (type_int, 1, NULL); }
 	| UNSIGNED
 	{ $$ = new_type (type_int, 0, NULL); }
+	| FLOAT
+	{ $$ = new_type (type_float, 0, NULL); }
 	| DOUBLE
 	{ $$ = new_type (type_double, 0, NULL); }
 	| BOOL

@@ -36,7 +36,7 @@ extern enum output_mode output_mode;
 /* Abstract syntax tree types. */
 enum type_enum {
   type_char, type_short, type_int, type_hyper,
-  type_double,
+  type_float, type_double,
   type_bool,
   type_ident,
 };
