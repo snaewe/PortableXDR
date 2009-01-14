@@ -1,4 +1,8 @@
+SUBDIRS = lib
+
 ACLOCAL_AMFLAGS = -I m4
+
+EXTRA_DIST = m4/gnulib-cache.m4
 
 nobase_include_HEADERS = rpc/rpc.h rpc/types.h rpc/xdr.h
 
