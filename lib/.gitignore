@@ -2,3 +2,4 @@
 /dummy.c
 /stdint.in.h
 /wchar.in.h
+/intprops.h
